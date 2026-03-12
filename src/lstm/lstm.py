@@ -17,7 +17,8 @@ class LSTM:
     """
     
     def __init__(self, input_dim: int, hidden_dim: int, num_layers: int = 1,
-                 cell_dim: Optional[int] = None, bidirectional: bool = False):
+                 cell_dim: Optional[int] = None, bidirectional: bool = False,
+                 return_sequences: bool = False):
         """
         Initialize stacked LSTM network.
         
@@ -27,12 +28,14 @@ class LSTM:
             num_layers: Number of LSTM layers
             cell_dim: Cell state dimension (defaults to hidden_dim if None)
             bidirectional: Whether to use bidirectional LSTM
+            return_sequences: Whether to return sequences from all layers
         """
         self.input_dim = input_dim
         self.hidden_dim = hidden_dim
         self.num_layers = num_layers
         self.cell_dim = cell_dim if cell_dim is not None else hidden_dim
         self.bidirectional = bidirectional
+        self.return_sequences = return_sequences
         
         # Create LSTM layers
         self.layers: List[LSTMLayer] = []
@@ -48,7 +51,7 @@ class LSTM:
                 input_dim=layer_input_dim,
                 hidden_dim=hidden_dim,
                 cell_dim=cell_dim,
-                return_sequences=(i < num_layers - 1)  # Only last layer returns final state
+                return_sequences=return_sequences or (i < num_layers - 1)
             )
             self.layers.append(layer)
         
@@ -344,7 +347,8 @@ class EmbeddingLSTM:
             hidden_dim=hidden_dim,
             num_layers=num_layers,
             cell_dim=cell_dim,
-            bidirectional=bidirectional
+            bidirectional=bidirectional,
+            return_sequences=True  # Always return sequences for seq2seq
         )
     
     def embed(self, indices: np.ndarray) -> np.ndarray:
