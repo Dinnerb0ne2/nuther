@@ -3,3 +3,9 @@
 .vscode
 test*.*
 p.txt
+todo.txt
+__pycache__/
+data
+
+# 计算代码行数的小工具
+line.py 
