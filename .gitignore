@@ -1,0 +1,5 @@
+.test
+.DS_store
+.vscode
+test*.*
+p.txt
