@@ -31,11 +31,25 @@ import os
 import argparse
 from typing import Optional, Dict, List
 
-from .config import config
-from .vocab import Vocabulary
-from .crawler import CrawlerPipeline, create_sample_knowledge_base
-from .model import NutherModel
-from .chat import ChatBot
+# Handle both module and script execution
+if __name__ == '__main__' or __package__ is None:
+    # Running as script: add parent directory to path
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    parent_dir = os.path.dirname(current_dir)
+    sys.path.insert(0, parent_dir)
+    
+    from src.config import config
+    from src.vocab import Vocabulary
+    from src.crawler import CrawlerPipeline, create_sample_knowledge_base
+    from src.model import NutherModel
+    from src.chat import ChatBot
+else:
+    # Running as module: use relative imports
+    from .config import config
+    from .vocab import Vocabulary
+    from .crawler import CrawlerPipeline, create_sample_knowledge_base
+    from .model import NutherModel
+    from .chat import ChatBot
 
 
 class NutherFramework:
